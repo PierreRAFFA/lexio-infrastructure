@@ -1,0 +1,18 @@
+version: '3'
+services:
+  #wordz-api:
+    #container_name: wordz-api
+    #image: pierreraffa/wordz-api
+
+  wordz-api-mongo:
+    container_name: wordz-api-mongo
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - /opt/wordz-api-mongo/db:/data/db
+    command: --auth
+    env_file: .env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
