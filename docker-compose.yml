@@ -4,16 +4,72 @@ services:
     #container_name: wordz-api
     #image: pierreraffa/wordz-api
 
+  # Mongo Database for the purchase
+  # ===============================
+  wordz-purchase-mongo:
+    container_name: wordz-purchase-mongo
+    build: ./wordz-purchase-mongo
+    expose:
+      - "27017"
+    volumes:
+      - /opt/wordz-purchase-mongo/db:/data/db
+    command: --auth
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+
+  # Microservice for the purchase
+  # =============================
+  wordz-purchase:
+    container_name: wordz-purchase
+    build: ../wordz-purchase
+    expose:
+      - "3010"
+    volumes:
+      - ../wordz-purchase:/var/app
+    environment:
+      NODE_ENV: development
+    links:
+      - wordz-purchase-mongo:mongohost
+
+  # Mongo Database for the api
+  # ==========================
   wordz-api-mongo:
     container_name: wordz-api-mongo
     build: ./wordz-api-mongo
-#    ports:
-#      - "27017:27017"
     expose:
       - "27017"
     volumes:
       - /opt/wordz-api-mongo/db:/data/db
     command: --auth
     environment:
-      MONGO_INITDB_ROOT_USERNAME: admin4
+      MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password
+
+  # Microservice for the api
+  # ========================
+  wordz-api:
+    container_name: wordz-api
+    build: ../wordz-api
+    ports:
+      - "3010:3010"
+    volumes:
+      - ../wordz-api:/var/app
+    environment:
+      NODE_ENV: development
+    links:
+      - wordz-api-mongo:mongohost
+      - wordz-purchase:wordz-purchase
+
+  # Cron Service
+  # ============
+  wordz-cron:
+    container_name: wordz-cron
+    build: ../wordz-cron
+    volumes:
+          - ../wordz-cron:/var/app
+    environment:
+      NODE_ENV: development
+    links:
+      - wordz-api-mongo:mongohost
+

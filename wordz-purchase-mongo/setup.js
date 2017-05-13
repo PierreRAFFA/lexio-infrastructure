@@ -1,7 +1,7 @@
 let res = [
   db.getName(),
   db.auth('admin', 'password'),
-  mainDb = db.getSiblingDB('api'),
+  mainDb = db.getSiblingDB('purchase'),
   mainDb.createUser({ user: 'api', pwd: 'password', roles: ['readWrite'] })
 ];
 
