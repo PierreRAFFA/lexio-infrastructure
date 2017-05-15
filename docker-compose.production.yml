@@ -1,0 +1,36 @@
+version: '3'
+services:
+
+  # Mongo Database for the purchase
+  # ===============================
+  wordz-purchase-mongo:
+    container_name: wordz-purchase-mongo
+    env_file: .env
+    command: --auth
+    build:
+      context: ./wordz-purchase-mongo
+      args: # used by setup.js
+        - mongoInitDbRootUsername=${MONGO_INITDB_ROOT_USERNAME}
+        - mongoInitDbRootPassword=${MONGO_INITDB_ROOT_PASSWORD}
+        - mongoApiPassword=${MONGO_API_PASSWORD}
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    ports:
+      - "27017:27017"
+    volumes:
+      - /opt/wordz/prod/wordz-purchase-mongo/db:/data/db
+
+  # Microservice for the purchase
+  # =============================
+  wordz-purchase:
+    container_name: wordz-purchase
+    image: pierreraffa/wordz-purchase:latest
+    expose:
+      - "3010"
+    environment:
+      NODE_ENV: production
+      MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
+    links:
+      - wordz-purchase-mongo:mongohost
+

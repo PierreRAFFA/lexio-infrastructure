@@ -2,12 +2,24 @@
 
 Infrastructure using docker-compose to build all containers.  
 Before executing any commands, make sure each microservice has been cloned and placed at the same level as the infrastructure:  
-    - wordz-infrastructure  
-    - wordz-api  
-    - wordz-purchase  
-    - ...  
+- wordz-infrastructure  
+- wordz-api  
+- wordz-purchase  
+- ...  
+
+#### Build
+```sh
+$ docker-compose rm -fv wordz-api-mongo && rm -rf /opt/wordz*
+$ docker-compose up --build
+```
+
+
+#### Clean up
 
 ```sh
-$ docker-compose rm -fv wordz-api-mongo && rm -rf /opt/wordz-api-mongo
-$ docker-compose up --build
+# Delete all containers
+$ docker rm $(docker ps -a -q)  
+
+# Delete all images
+$ docker rmi $(docker images -q)
 ```

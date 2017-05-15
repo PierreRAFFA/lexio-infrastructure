@@ -1,8 +1,8 @@
-let res = [
+const res = [
   db.getName(),
-  db.auth('admin', 'password'),
+  db.auth('$mongoInitDbRootUsername', '$mongoInitDbRootPassword'),
   mainDb = db.getSiblingDB('api'),
-  mainDb.createUser({ user: 'api', pwd: 'password', roles: ['readWrite'] })
+  mainDb.createUser({ user: 'api', pwd: '$mongoApiPassword', roles: ['readWrite'] })
 ];
 
 print('==============');
