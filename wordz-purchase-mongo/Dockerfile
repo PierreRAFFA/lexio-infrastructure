@@ -11,4 +11,6 @@ RUN sed 's#$mongoInitDbRootPassword#'$mongoInitDbRootPassword'#' -i /docker-entr
 RUN sed 's#$mongoApiPassword#'$mongoApiPassword'#' -i /docker-entrypoint-initdb.d/setup.js
 RUN cat /docker-entrypoint-initdb.d/setup.js
 
+EXPOSE 27017
+
 CMD ["mongod", "--auth", "--smallfiles"]

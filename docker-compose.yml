@@ -78,7 +78,6 @@ services:
   wordz-cron:
     container_name: wordz-cron
     build:
-    build:
       context: ../wordz-cron
       args: # used by setup.js
         - nodeEnv=development
