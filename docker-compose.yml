@@ -52,7 +52,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - /opt/wordz-api-mongo/db:/data/db
+      - /opt/wordz/dev/wordz-api-mongo/db:/data/db
     command: --auth
 
   # Microservice for the api
@@ -77,16 +77,12 @@ services:
   # ============
   wordz-cron:
     container_name: wordz-cron
-    build:
-      context: ../wordz-cron
-      args: # used by setup.js
-        - nodeEnv=development
-        - mongoApiPassword=password
-    volumes:
-      - ../wordz-cron:/var/app
     environment:
       NODE_ENV: development
       MONGO_API_PASSWORD: password
+    build:
+      context: ../wordz-cron
+    volumes:
+      - ../wordz-cron:/var/app
     links:
       - wordz-api-mongo:mongohost
-
