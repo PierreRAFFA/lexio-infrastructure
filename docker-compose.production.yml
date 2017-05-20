@@ -1,92 +1,90 @@
 version: '3'
 services:
 
-#  # Mongo Database for the purchase
-#  # ===============================
-#  wordz-purchase-mongo:
-#    container_name: wordz-purchase-mongo
-#    env_file: .env
-#    command: --auth
-#    build:
-#      context: ./wordz-purchase-mongo
-#      args: # used by setup.js
-#        - mongoInitDbRootUsername=${MONGO_INITDB_ROOT_USERNAME}
-#        - mongoInitDbRootPassword=${MONGO_INITDB_ROOT_PASSWORD}
-#        - mongoApiPassword=${MONGO_API_PASSWORD}
-#    environment:
-#      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-#      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-#    expose:
-#      - "27017"
+  # Mongo Database for the purchase
+  # ===============================
+  wordz-purchase-mongo:
+    container_name: wordz-purchase-mongo
+    env_file: .env
+    command: --auth
+    build:
+      context: ./wordz-purchase-mongo
+      args: # used by setup.js
+        - mongoInitDbRootUsername=${MONGO_INITDB_ROOT_USERNAME}
+        - mongoInitDbRootPassword=${MONGO_INITDB_ROOT_PASSWORD}
+        - mongoApiPassword=${MONGO_API_PASSWORD}
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    expose:
+      - "27017"
+    volumes:
+      - /opt/wordz/prod/wordz-purchase-mongo/db:/data/db
+
+  # Microservice for the purchase
+  # =============================
+  wordz-purchase:
+    container_name: wordz-purchase
+    image: pierreraffa/wordz-purchase:latest
+    environment:
+      NODE_ENV: production
+      MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
+      API_ADMIN_PASSWORD: ${API_ADMIN_PASSWORD}
+    expose:
+      - "3010"
 #    volumes:
-#      - /opt/wordz/prod/wordz-purchase-mongo/db:/data/db
-#
-#  # Microservice for the purchase
-#  # =============================
-#  wordz-purchase:
-#    container_name: wordz-purchase
-#    image: pierreraffa/wordz-purchase:latest
-#    environment:
-#      NODE_ENV: production
-#      MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
-#      API_ADMIN_PASSWORD: ${API_ADMIN_PASSWORD}
-#    expose:
-#      - "3010"
-##    volumes:
-##      - ../wordz-purchase:/var/app
-#    links:
-#      - wordz-purchase-mongo:mongohost
-#
-#  # Mongo Database for the api
-#  # ==========================
-#  wordz-api-mongo:
-#    container_name: wordz-api-mongo
-#    env_file: .env
-#    command: --auth
-#    build:
-#      context: ./wordz-api-mongo
-#      args: # used by setup.js
-#        - mongoInitDbRootUsername=${MONGO_INITDB_ROOT_USERNAME}
-#        - mongoInitDbRootPassword=${MONGO_INITDB_ROOT_PASSWORD}
-#        - mongoApiPassword=${MONGO_API_PASSWORD}
-#    environment:
-#      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-#      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-#    expose:
-#      - "27017"
+#      - ../wordz-purchase:/var/app
+    links:
+      - wordz-purchase-mongo:mongohost
+
+  # Mongo Database for the api
+  # ==========================
+  wordz-api-mongo:
+    container_name: wordz-api-mongo
+    env_file: .env
+    command: --auth
+    build:
+      context: ./wordz-api-mongo
+      args: # used by setup.js
+        - mongoInitDbRootUsername=${MONGO_INITDB_ROOT_USERNAME}
+        - mongoInitDbRootPassword=${MONGO_INITDB_ROOT_PASSWORD}
+        - mongoApiPassword=${MONGO_API_PASSWORD}
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    expose:
+      - "27017"
+    volumes:
+      - /opt/wordz/prod/wordz-api-mongo/db:/data/db
+
+  # Microservice for the api
+  # ========================
+  wordz-api:
+    container_name: wordz-api
+    image: pierreraffa/wordz-api:latest
+    environment:
+      NODE_ENV: production
+      MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
+      API_ADMIN_PASSWORD: ${API_ADMIN_PASSWORD}
+    ports:
+      - "3010:3010"
 #    volumes:
-#      - /opt/wordz/prod/wordz-api-mongo/db:/data/db
-#
-#  # Microservice for the api
-#  # ========================
-#  wordz-api:
-#    container_name: wordz-api
-#    image: pierreraffa/wordz-api:latest
-#    environment:
-#      NODE_ENV: production
-#      MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
-#      API_ADMIN_PASSWORD: ${API_ADMIN_PASSWORD}
-#    ports:
-#      - "3010:3010"
-##    volumes:
-##      - ../wordz-api:/var/app
-#    links:
-#      - wordz-api-mongo:mongohost
-#      - wordz-purchase:wordz-purchase
+#      - ../wordz-api:/var/app
+    links:
+      - wordz-api-mongo:mongohost
+      - wordz-purchase:wordz-purchase
 
   # Cron Service
   # ============
   wordz-cron:
     container_name: wordz-cron
     image: pierreraffa/wordz-cron:latest
-#    build:
-#      args:
-#        - nodeEnv=production
-#        - mongoApiPassword=${MONGO_API_PASSWORD}
-#    volumes:
-#      - ../wordz-cron:/var/app
     environment:
       NODE_ENV: production
       MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
-#    links:
-#      - wordz-api-mongo:mongohost
+    build:
+      context: ../wordz-cron
+#    volumes:
+#      - ../wordz-cron:/var/app
+    links:
+      - wordz-api-mongo:mongohost
