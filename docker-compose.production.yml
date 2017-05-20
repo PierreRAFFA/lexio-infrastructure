@@ -66,6 +66,7 @@ services:
       NODE_ENV: production
       MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
       API_ADMIN_PASSWORD: ${API_ADMIN_PASSWORD}
+      API_FACEBOOK_USER_PASSWORD: ${API_FACEBOOK_USER_PASSWORD}
     ports:
       - "3010:3010"
 #    volumes:
@@ -82,8 +83,8 @@ services:
     environment:
       NODE_ENV: production
       MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
-    build:
-      context: ../wordz-cron
+#    build:
+#      context: ../wordz-cron
 #    volumes:
 #      - ../wordz-cron:/var/app
     links:
