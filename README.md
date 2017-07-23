@@ -5,6 +5,7 @@ Before executing any commands, make sure each microservice has been cloned and p
 - wordz-infrastructure  
 - wordz-api  
 - wordz-purchase  
+- wordz-push-notification
 - ...  
 
 #### Build

@@ -1,6 +1,40 @@
 version: '3'
 services:
 
+  # Mongo Database for the push notification
+  # ========================================
+  wordz-push-notification-mongo:
+    container_name: wordz-push-notification-mongo
+    env_file: .env
+    command: --auth
+    build:
+      context: ./wordz-push-notification-mongo
+      args: # used by setup.js
+        - mongoInitDbRootUsername=${MONGO_INITDB_ROOT_USERNAME}
+        - mongoInitDbRootPassword=${MONGO_INITDB_ROOT_PASSWORD}
+        - mongoApiPassword=${MONGO_API_PASSWORD}
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    expose:
+      - "27017"
+    volumes:
+      - /opt/wordz/prod/wordz-push-notification-mongo/db:/data/db
+
+  # Microservice for the push notification
+  # ======================================
+  wordz-push-notification:
+    container_name: wordz-push-notification
+    image: pierreraffa/wordz-push-notification:latest
+    environment:
+      NODE_ENV: production
+      MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
+      API_ADMIN_PASSWORD: ${API_ADMIN_PASSWORD}
+    expose:
+      - "3010"
+    links:
+      - wordz-push-notification-mongo:mongohost
+
   # Mongo Database for the purchase
   # ===============================
   wordz-purchase-mongo:
@@ -32,8 +66,6 @@ services:
       API_ADMIN_PASSWORD: ${API_ADMIN_PASSWORD}
     expose:
       - "3010"
-#    volumes:
-#      - ../wordz-purchase:/var/app
     links:
       - wordz-purchase-mongo:mongohost
 
@@ -69,8 +101,6 @@ services:
       API_FACEBOOK_USER_PASSWORD: ${API_FACEBOOK_USER_PASSWORD}
     ports:
       - "3010:3010"
-#    volumes:
-#      - ../wordz-api:/var/app
     links:
       - wordz-api-mongo:mongohost
       - wordz-purchase:wordz-purchase
@@ -83,9 +113,5 @@ services:
     environment:
       NODE_ENV: production
       MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
-#    build:
-#      context: ../wordz-cron
-#    volumes:
-#      - ../wordz-cron:/var/app
     links:
       - wordz-api-mongo:mongohost

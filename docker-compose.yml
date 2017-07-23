@@ -1,6 +1,41 @@
 version: '3'
 services:
 
+  # Mongo Database for the push notifications
+  # =========================================
+  wordz-push-notification-mongo:
+    container_name: wordz-push-notification-mongo
+    command: --auth
+    build:
+      context: ./wordz-push-notification-mongo
+      args: # used by setup.js
+        - mongoInitDbRootUsername=admin
+        - mongoInitDbRootPassword=password
+        - mongoApiPassword=password
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - "27019:27017"
+    volumes:
+      - /opt/wordz/dev/wordz-push-notification-mongo/db:/data/db
+
+  # Microservice for the push notifications
+  # =======================================
+  wordz-push-notification:
+    container_name: wordz-push-notification
+    build: ../wordz-push-notification
+    environment:
+      NODE_ENV: development
+      MONGO_API_PASSWORD: password
+      API_ADMIN_PASSWORD: password
+    ports:
+      - "3030:3010"
+    volumes:
+      - ../wordz-push-notification:/var/app
+    links:
+      - wordz-push-notification-mongo:mongohost
+
   # Mongo Database for the purchase
   # ===============================
   wordz-purchase-mongo:
