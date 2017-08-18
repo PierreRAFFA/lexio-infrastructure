@@ -10,7 +10,7 @@ Before executing any commands, make sure each microservice has been cloned and p
 
 #### Build
 ```sh
-$ docker-compose rm -fv wordz-api-mongo && rm -rf /opt/wordz*
+$ docker-compose rm -fv wordz-authentication-mongo && rm -rf /opt/wordz*
 $ docker-compose up --build
 ```
 

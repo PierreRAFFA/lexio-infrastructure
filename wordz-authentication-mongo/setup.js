@@ -1,7 +1,7 @@
 const res = [
   db.getName(),
   db.auth('{{mongoInitDbRootUsername}}', '{{mongoInitDbRootPassword}}'),
-  mainDb = db.getSiblingDB('purchase'),
+  mainDb = db.getSiblingDB('authentication'),
   mainDb.createUser({ user: 'api', pwd: '{{mongoApiPassword}}', roles: ['readWrite'] })
 ];
 

@@ -16,7 +16,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password
     ports:
-      - "27019:27017"
+      - "27020:27017"
     volumes:
       - /opt/wordz/dev/wordz-push-notification-mongo/db:/data/db
 
@@ -29,13 +29,14 @@ services:
       NODE_ENV: development
       MONGO_API_PASSWORD: password
       API_ADMIN_PASSWORD: password
+      JWT_SECRET: secret
     ports:
-      - "3030:3010"
+      - "3004:3010"
     volumes:
       - ../wordz-push-notification:/var/app
     links:
       - wordz-push-notification-mongo:mongohost
-
+#
   # Mongo Database for the purchase
   # ===============================
   wordz-purchase-mongo:
@@ -51,7 +52,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password
     ports:
-      - "27018:27017"
+      - "27019:27017"
     volumes:
       - /opt/wordz/dev/wordz-purchase-mongo/db:/data/db
 
@@ -64,19 +65,58 @@ services:
       NODE_ENV: development
       MONGO_API_PASSWORD: password
       API_ADMIN_PASSWORD: password
+      JWT_SECRET: secret
     ports:
-      - "3020:3010"
+      - "3003:3010"
     volumes:
       - ../wordz-purchase:/var/app
     links:
       - wordz-purchase-mongo:mongohost
 
-  # Mongo Database for the api
-  # ==========================
-  wordz-api-mongo:
-    container_name: wordz-api-mongo
+  # Mongo Database for the games
+  # ============================
+  wordz-game-mongo:
+    container_name: wordz-game-mongo
+    command: --auth
     build:
-      context: ./wordz-api-mongo
+      context: ./wordz-game-mongo
+      args: # used by setup.js
+        - mongoInitDbRootUsername=admin
+        - mongoInitDbRootPassword=password
+        - mongoApiPassword=password
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - "27018:27017"
+    volumes:
+      - /opt/wordz/dev/wordz-game-mongo/db:/data/db
+
+  # Microservice for the games
+  # ==========================
+  wordz-game:
+    container_name: wordz-game
+    build: ../wordz-game
+    environment:
+      NODE_ENV: development
+      MONGO_API_PASSWORD: password
+      API_ADMIN_PASSWORD: password
+      JWT_SECRET: secret
+    ports:
+      - "3002:3010"
+    volumes:
+      - ../wordz-game:/var/app
+    links:
+      - wordz-game-mongo:mongohost
+      - wordz-authentication:wordz-authentication
+
+
+  # Mongo Database for the gateway
+  # ==============================
+  wordz-authentication-mongo:
+    container_name: wordz-authentication-mongo
+    build:
+      context: ./wordz-authentication-mongo
       args: # used by setup.js
         - mongoInitDbRootUsername=admin
         - mongoInitDbRootPassword=password
@@ -87,26 +127,39 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - /opt/wordz/dev/wordz-api-mongo/db:/data/db
+      - /opt/wordz/dev/wordz-authentication-mongo/db:/data/db
     command: --auth
 
-  # Microservice for the api
-  # ========================
-  wordz-api:
-    container_name: wordz-api
-    build: ../wordz-api
-    ports:
-      - "3010:3010"
-    volumes:
-      - ../wordz-api:/var/app
+  # Microservice for the authentication
+  # ===================================
+  wordz-authentication:
+    container_name: wordz-authentication
+    build: ../wordz-authentication
     environment:
       NODE_ENV: development
       MONGO_API_PASSWORD: password
       API_ADMIN_PASSWORD: password
       API_FACEBOOK_USER_PASSWORD: password
+      JWT_SECRET: secret
+    ports:
+      - "3001:3010"
+    volumes:
+      - ../wordz-authentication:/var/app
     links:
-      - wordz-api-mongo:mongohost
-      - wordz-purchase:wordz-purchase
+      - wordz-authentication-mongo:mongohost
+
+  # Microservice for the gateway
+  # ============================
+  wordz-gateway:
+    container_name: wordz-gateway
+    build: ../wordz-gateway
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../wordz-gateway:/var/app
+    environment:
+      NODE_ENV: development
+      JWT_SECRET: secret
 
   # Cron Service
   # ============
@@ -115,9 +168,17 @@ services:
     environment:
       NODE_ENV: development
       MONGO_API_PASSWORD: password
+      AUTHENTICATION_API_ADMIN_PASSWORD: password
     build:
       context: ../wordz-cron
     volumes:
       - ../wordz-cron:/var/app
     links:
-      - wordz-api-mongo:mongohost
+      - wordz-authentication-mongo:mongohost
+
+
+
+
+
+
+

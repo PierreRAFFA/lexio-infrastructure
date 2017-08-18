@@ -30,6 +30,7 @@ services:
       NODE_ENV: production
       MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
       API_ADMIN_PASSWORD: ${API_ADMIN_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
     expose:
       - "3010"
     links:
@@ -64,6 +65,7 @@ services:
       NODE_ENV: production
       MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
       API_ADMIN_PASSWORD: ${API_ADMIN_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
     expose:
       - "3010"
     links:
@@ -71,12 +73,12 @@ services:
 
   # Mongo Database for the api
   # ==========================
-  wordz-api-mongo:
-    container_name: wordz-api-mongo
+  wordz-gateway-mongo:
+    container_name: wordz-gateway-mongo
     env_file: .env
     command: --auth
     build:
-      context: ./wordz-api-mongo
+      context: ./wordz-gateway-mongo
       args: # used by setup.js
         - mongoInitDbRootUsername=${MONGO_INITDB_ROOT_USERNAME}
         - mongoInitDbRootPassword=${MONGO_INITDB_ROOT_PASSWORD}
@@ -87,22 +89,23 @@ services:
     expose:
       - "27017"
     volumes:
-      - /opt/wordz/prod/wordz-api-mongo/db:/data/db
+      - /opt/wordz/prod/wordz-gateway-mongo/db:/data/db
 
   # Microservice for the api
   # ========================
-  wordz-api:
-    container_name: wordz-api
-    image: pierreraffa/wordz-api:latest
+  wordz-gateway:
+    container_name: wordz-gateway
+    image: pierreraffa/wordz-gateway:latest
     environment:
       NODE_ENV: production
       MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
       API_ADMIN_PASSWORD: ${API_ADMIN_PASSWORD}
       API_FACEBOOK_USER_PASSWORD: ${API_FACEBOOK_USER_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
     ports:
       - "3010:3010"
     links:
-      - wordz-api-mongo:mongohost
+      - wordz-gateway-mongo:mongohost
       - wordz-purchase:wordz-purchase
 
   # Cron Service
@@ -113,5 +116,6 @@ services:
     environment:
       NODE_ENV: production
       MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
+      AUTHENTICATION_API_ADMIN_PASSWORD: ${API_ADMIN_PASSWORD}
     links:
-      - wordz-api-mongo:mongohost
+      - wordz-gateway-mongo:mongohost
