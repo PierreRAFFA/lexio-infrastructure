@@ -173,12 +173,10 @@ services:
       context: ../wordz-cron
     volumes:
       - ../wordz-cron:/var/app
-    links:
-      - wordz-authentication-mongo:mongohost
 
-
-
-
-
-
+  # Redis Service
+  # ============
+  redis:
+    container_name: wordz-redis
+    image: redis
 
