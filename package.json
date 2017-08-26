@@ -1,6 +1,6 @@
 {
   "name": "wordz-infrastructure",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Infrastructure using docker-compose to build all containers.   Before executing any commands, make sure each microservice has been cloned and placed at the same level as the infrastructure:       - wordz-infrastructure       - wordz-api       - wordz-purchase       - ...",
   "scripts": {},
   "repository": {
