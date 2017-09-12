@@ -135,6 +135,8 @@ services:
   wordz-authentication:
     container_name: wordz-authentication
     image: pierreraffa/wordz-authentication:latest
+    build:
+      context: ../wordz-authentication
     environment:
       NODE_ENV: production
       MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
@@ -152,11 +154,13 @@ services:
   wordz-gateway:
     container_name: wordz-gateway
     image: pierreraffa/wordz-gateway:latest
+    build:
+      context: ../wordz-gateway
     environment:
       NODE_ENV: production
       JWT_SECRET: ${JWT_SECRET}
     ports:
-      - "3000:3000"
+      - "80:3000"
 
   # Cron Service
   # ============

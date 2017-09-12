@@ -154,7 +154,7 @@ services:
     container_name: wordz-gateway
     build: ../wordz-gateway
     ports:
-      - "3000:3000"
+      - "80:3000"
     volumes:
       - ../wordz-gateway:/var/app
     environment:
