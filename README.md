@@ -2,10 +2,10 @@
 
 Infrastructure using docker-compose to build all containers.  
 Before executing any commands, make sure each microservice has been cloned and placed at the same level as the infrastructure:  
-- wordz-infrastructure  
-- wordz-api  
-- wordz-purchase  
-- wordz-push-notification
+- lexio-infrastructure  
+- lexio-api  
+- lexio-purchase  
+- lexio-push-notification
 - ...  
 
 
@@ -22,7 +22,7 @@ $ docker-compose -f docker-compose.production.yml up -d
 
 #### Build
 ```sh
-$ docker-compose rm -fv wordz-authentication-mongo && rm -rf /opt/wordz*
+$ docker-compose rm -fv lexio-authentication-mongo && rm -rf /opt/lexio*
 $ docker-compose up --build
 ```
 
@@ -38,12 +38,14 @@ $ docker rmi $(docker images -q)
 
 #### Update a container with the new image
 ```sh
-$ docker-compose -f docker-compose.production.yml pull wordz-authentication
-$ docker-compose -f docker-compose.production.yml up -d --no-deps --build wordz-authentication
+$ docker-compose -f docker-compose.production.yml pull lexio-gateway
+$ docker-compose -f docker-compose.production.yml up -d --no-deps --build lexio-gateway
 ```
-
-
 
 #### Install Let's Encrypt Client
 $ echo 'deb http://ftp.debian.org/debian jessie-backports main' | sudo tee /etc/apt/sources.list.d/backports.list
 $ sudo apt-get update
+
+
+#### Update the infrastructure server-side
+scp -r . root@lexiolive:/var/infrastructure

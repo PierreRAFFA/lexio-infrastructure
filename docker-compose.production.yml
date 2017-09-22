@@ -3,13 +3,13 @@ services:
 
   # Mongo Database for the push notification
   # ========================================
-  wordz-push-notification-mongo:
-    container_name: wordz-push-notification-mongo
-    image: pierreraffa/wordz-push-notification-mongo:latest
+  lexio-push-notification-mongo:
+    container_name: lexio-push-notification-mongo
+    image: lexio/lexio-push-notification-mongo:latest
     env_file: .env
     command: --auth
     build:
-      context: ./wordz-push-notification-mongo
+      context: ./lexio-push-notification-mongo
       args: # used by setup.js
         - mongoInitDbRootUsername=${MONGO_INITDB_ROOT_USERNAME}
         - mongoInitDbRootPassword=${MONGO_INITDB_ROOT_PASSWORD}
@@ -20,13 +20,14 @@ services:
     expose:
       - "27017"
     volumes:
-      - /opt/wordz/prod/wordz-push-notification-mongo/db:/data/db
+      - /opt/lexio/prod/lexio-push-notification-mongo/db:/data/db
 
   # Microservice for the push notification
   # ======================================
-  wordz-push-notification:
-    container_name: wordz-push-notification
-    image: pierreraffa/wordz-push-notification:latest
+  lexio-push-notification:
+    container_name: lexio-push-notification
+    image: lexio/lexio-push-notification:latest
+    build: ../lexio-push-notification
     environment:
       NODE_ENV: production
       MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
@@ -35,17 +36,17 @@ services:
     expose:
       - "3010"
     links:
-      - wordz-push-notification-mongo:mongohost
+      - lexio-push-notification-mongo:mongohost
 
   # Mongo Database for the purchase
   # ===============================
-  wordz-purchase-mongo:
-    container_name: wordz-purchase-mongo
-    image: pierreraffa/wordz-purchase-mongo:latest
+  lexio-purchase-mongo:
+    container_name: lexio-purchase-mongo
+    image: lexio/lexio-purchase-mongo:latest
     env_file: .env
     command: --auth
     build:
-      context: ./wordz-purchase-mongo
+      context: ./lexio-purchase-mongo
       args: # used by setup.js
         - mongoInitDbRootUsername=${MONGO_INITDB_ROOT_USERNAME}
         - mongoInitDbRootPassword=${MONGO_INITDB_ROOT_PASSWORD}
@@ -56,13 +57,15 @@ services:
     expose:
       - "27017"
     volumes:
-      - /opt/wordz/prod/wordz-purchase-mongo/db:/data/db
+      - /opt/lexio/prod/lexio-purchase-mongo/db:/data/db
 
   # Microservice for the purchase
   # =============================
-  wordz-purchase:
-    container_name: wordz-purchase
-    image: pierreraffa/wordz-purchase:latest
+  lexio-purchase:
+    container_name: lexio-purchase
+    image: lexio/lexio-purchase:latest
+    #build:
+    #  context: ../lexio-purchase
     environment:
       NODE_ENV: production
       MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
@@ -71,17 +74,17 @@ services:
     expose:
       - "3010"
     links:
-      - wordz-purchase-mongo:mongohost
+      - lexio-purchase-mongo:mongohost
 
   # Mongo Database for the game
   # ===============================
-  wordz-game-mongo:
-    container_name: wordz-game-mongo
-    image: pierreraffa/wordz-game-mongo:latest
+  lexio-game-mongo:
+    container_name: lexio-game-mongo
+    image: lexio/lexio-game-mongo:latest
     env_file: .env
     command: --auth
     build:
-      context: ./wordz-game-mongo
+      context: ./lexio-game-mongo
       args: # used by setup.js
         - mongoInitDbRootUsername=${MONGO_INITDB_ROOT_USERNAME}
         - mongoInitDbRootPassword=${MONGO_INITDB_ROOT_PASSWORD}
@@ -92,13 +95,15 @@ services:
     expose:
       - "27017"
     volumes:
-      - /opt/wordz/prod/wordz-game-mongo/db:/data/db
+      - /opt/lexio/prod/lexio-game-mongo/db:/data/db
 
   # Microservice for the game
   # =============================
-  wordz-game:
-    container_name: wordz-game
-    image: pierreraffa/wordz-game:latest
+  lexio-game:
+    container_name: lexio-game
+    image: lexio/lexio-game:latest
+    #build:
+    #  context: ../lexio-game
     environment:
       NODE_ENV: production
       MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
@@ -107,17 +112,17 @@ services:
     expose:
       - "3010"
     links:
-      - wordz-game-mongo:mongohost
+      - lexio-game-mongo:mongohost
 
   # Mongo Database for the authentication
   # ===============================
-  wordz-authentication-mongo:
-    container_name: wordz-authentication-mongo
-    image: pierreraffa/wordz-authentication-mongo:latest
+  lexio-authentication-mongo:
+    container_name: lexio-authentication-mongo
+    image: lexio/lexio-authentication-mongo:latest
     env_file: .env
     command: --auth
     build:
-      context: ./wordz-authentication-mongo
+      context: ./lexio-authentication-mongo
       args: # used by setup.js
         - mongoInitDbRootUsername=${MONGO_INITDB_ROOT_USERNAME}
         - mongoInitDbRootPassword=${MONGO_INITDB_ROOT_PASSWORD}
@@ -128,15 +133,15 @@ services:
     expose:
       - "27017"
     volumes:
-      - /opt/wordz/prod/wordz-authentication-mongo/db:/data/db
+      - /opt/lexio/prod/lexio-authentication-mongo/db:/data/db
 
   # Microservice for the authentication
   # =============================
-  wordz-authentication:
-    container_name: wordz-authentication
-    image: pierreraffa/wordz-authentication:latest
-    build:
-      context: ../wordz-authentication
+  lexio-authentication:
+    container_name: lexio-authentication
+    image: lexio/lexio-authentication:latest
+    #build:
+    #  context: ../lexio-authentication
     environment:
       NODE_ENV: production
       MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
@@ -146,30 +151,34 @@ services:
     expose:
       - "3010"
     links:
-      - wordz-authentication-mongo:mongohost
+      - lexio-authentication-mongo:mongohost
 
 
   # Microservice for the gateway
   # ========================
-  wordz-gateway:
-    container_name: wordz-gateway
-    image: pierreraffa/wordz-gateway:latest
-    build:
-      context: ../wordz-gateway
+  lexio-gateway:
+    container_name: lexio-gateway
+    image: lexio/lexio-gateway:latest
+    #build:
+    #  context: ../lexio-gateway
     environment:
       NODE_ENV: production
       JWT_SECRET: ${JWT_SECRET}
     ports:
-      - "80:3000"
+      - "443:3000"
+    volumes:
+      - /etc/letsencrypt/archive/lexiogame.com:/var/app/ssl
 
   # Cron Service
   # ============
-  wordz-cron:
-    container_name: wordz-cron
-    image: pierreraffa/wordz-cron:latest
+  lexio-cron:
+    container_name: lexio-cron
+    image: lexio/lexio-cron:latest
+    #build:
+    #  context: ../lexio-cron
     environment:
       NODE_ENV: production
       MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
       AUTHENTICATION_API_ADMIN_PASSWORD: ${API_ADMIN_PASSWORD}
     links:
-      - wordz-authentication-mongo:mongohost
+      - lexio-authentication-mongo:mongohost
