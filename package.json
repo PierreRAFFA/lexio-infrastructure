@@ -1,6 +1,6 @@
 {
   "name": "LexioInfrastructure",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Infrastructure using docker-compose to build all containers",
   "scripts": {},
   "repository": {
