@@ -26,8 +26,8 @@ services:
   # ======================================
   lexio-push-notification:
     container_name: lexio-push-notification
-    image: lexio/lexio-push-notification:latest
     build: ../lexio-push-notification
+    image: lexio/lexio-push-notification:0.1.2
     environment:
       NODE_ENV: production
       MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
@@ -63,9 +63,8 @@ services:
   # =============================
   lexio-purchase:
     container_name: lexio-purchase
-    image: lexio/lexio-purchase:latest
-    #build:
-    #  context: ../lexio-purchase
+    image: lexio/lexio-purchase:0.2.0
+    build: ../lexio-purchase
     environment:
       NODE_ENV: production
       MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
@@ -101,9 +100,8 @@ services:
   # =============================
   lexio-game:
     container_name: lexio-game
-    image: lexio/lexio-game:latest
-    #build:
-    #  context: ../lexio-game
+    image: lexio/lexio-game:1.3.0
+    build: ../lexio-game
     environment:
       NODE_ENV: production
       MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
@@ -139,9 +137,8 @@ services:
   # =============================
   lexio-authentication:
     container_name: lexio-authentication
-    image: lexio/lexio-authentication:latest
-    #build:
-    #  context: ../lexio-authentication
+    image: lexio/lexio-authentication:0.5.0
+    build: ../lexio-authentication
     environment:
       NODE_ENV: production
       MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
@@ -158,9 +155,8 @@ services:
   # ========================
   lexio-gateway:
     container_name: lexio-gateway
-    image: lexio/lexio-gateway:latest
-    #build:
-    #  context: ../lexio-gateway
+    image: lexio/lexio-gateway:0.1.0
+    build: ../lexio-gateway
     environment:
       NODE_ENV: production
       JWT_SECRET: ${JWT_SECRET}
@@ -173,9 +169,8 @@ services:
   # ============
   lexio-cron:
     container_name: lexio-cron
-    image: lexio/lexio-cron:latest
-    #build:
-    #  context: ../lexio-cron
+    image: lexio/lexio-cron:0.2.3
+    build: ../lexio-cron
     environment:
       NODE_ENV: production
       MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
