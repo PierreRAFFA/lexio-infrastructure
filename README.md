@@ -39,19 +39,20 @@ $ docker rmi $(docker images -q)
 ```
 
 #### Deploy a container with the new image
-This command:
-    - builds a new image based on the version specified on the package.json of the service
-    - pushes the new image to DockerHub
-    - pulls the new image in the production server
-    - replaces the container by new one in the production server
+This command:  
+    - builds a new image based on the version specified on the package.json of the service  
+    - pushes the new image to DockerHub  
+    - pulls the new image in the production server  
+    - replaces the container by new one in the production server  
 ```sh
 $ ./build.sh lexio-game
 ```
 
 #### Install Let's Encrypt Client
+```bash
 $ echo 'deb http://ftp.debian.org/debian jessie-backports main' | sudo tee /etc/apt/sources.list.d/backports.list
 $ sudo apt-get update
-
+```
 
 #### Update the infrastructure server-side
 ```sh
