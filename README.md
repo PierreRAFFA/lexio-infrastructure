@@ -2,11 +2,13 @@
 
 Infrastructure using docker-compose to build all containers.  
 Before executing any commands, make sure each microservice has been cloned and placed at the same level as the infrastructure:  
-- lexio-infrastructure  
-- lexio-api  
-- lexio-purchase  
-- lexio-push-notification
-- ...  
+>.  
+..  
+lexio-infrastructure/    
+lexio-authentication/  
+lexio-game/  
+lexio-purchase/  
+lexio-push-notification/  
 
 
 #### Create a docker machine on AWS
@@ -36,10 +38,14 @@ $ docker rm $(docker ps -a -q)
 $ docker rmi $(docker images -q)
 ```
 
-#### Update a container with the new image
+#### Deploy a container with the new image
+This command:
+    - builds a new image based on the version specified on the package.json of the service
+    - pushes the new image to DockerHub
+    - pulls the new image in the production server
+    - replaces the container by new one in the production server
 ```sh
-$ docker-compose -f docker-compose.production.yml pull lexio-gateway
-$ docker-compose -f docker-compose.production.yml up -d --no-deps --build lexio-gateway
+$ ./build.sh lexio-game
 ```
 
 #### Install Let's Encrypt Client
@@ -48,4 +54,6 @@ $ sudo apt-get update
 
 
 #### Update the infrastructure server-side
-scp -r . root@lexiolive:/var/infrastructure
+```sh
+$ scp -r . root@lexiolive:/var/infrastructure
+```
