@@ -27,7 +27,7 @@ services:
   lexio-push-notification:
     container_name: lexio-push-notification
     build: ../lexio-push-notification
-    image: lexio/lexio-push-notification:0.1.2
+    image: lexio/lexio-push-notification:0.2.0
     environment:
       NODE_ENV: production
       MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
@@ -63,7 +63,7 @@ services:
   # =============================
   lexio-purchase:
     container_name: lexio-purchase
-    image: lexio/lexio-purchase:0.2.0
+    image: lexio/lexio-purchase:0.2.5
     build: ../lexio-purchase
     environment:
       NODE_ENV: production
@@ -100,7 +100,7 @@ services:
   # =============================
   lexio-game:
     container_name: lexio-game
-    image: lexio/lexio-game:1.3.0
+    image: lexio/lexio-game:1.5.1
     build: ../lexio-game
     environment:
       NODE_ENV: production
@@ -137,7 +137,7 @@ services:
   # =============================
   lexio-authentication:
     container_name: lexio-authentication
-    image: lexio/lexio-authentication:0.5.0
+    image: lexio/lexio-authentication:0.8.1
     build: ../lexio-authentication
     environment:
       NODE_ENV: production
@@ -155,7 +155,7 @@ services:
   # ========================
   lexio-gateway:
     container_name: lexio-gateway
-    image: lexio/lexio-gateway:0.1.0
+    image: lexio/lexio-gateway:0.2.0
     build: ../lexio-gateway
     environment:
       NODE_ENV: production
@@ -163,13 +163,13 @@ services:
     ports:
       - "443:3000"
     volumes:
-      - /etc/letsencrypt/archive/lexiogame.com:/var/app/ssl
+      - /etc/letsencrypt/archive/api.lexiogame.com:/var/app/ssl
 
   # Cron Service
   # ============
   lexio-cron:
     container_name: lexio-cron
-    image: lexio/lexio-cron:0.2.3
+    image: lexio/lexio-cron:0.4.4
     build: ../lexio-cron
     environment:
       NODE_ENV: production

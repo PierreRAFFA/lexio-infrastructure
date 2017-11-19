@@ -58,3 +58,22 @@ $ sudo apt-get update
 ```sh
 $ scp -r . root@lexiolive:/var/infrastructure
 ```
+
+#### Connect to a db
+```sh
+$ docker run -it --rm --net lexioinfrastructure_default --link lexio-authentication-mongo:mongo mongo mongo -u admin -p password --authenticationDatabase admin lexio-authentication-mongo/authentication
+$ docker run -it --rm --net lexioinfrastructure_default --link lexio-game-mongo:mongo mongo mongo -u admin -p password --authenticationDatabase admin lexio-game-mongo/game
+```
+
+#### Create/Renew the ssl certificate
+[How to create/renew](https://medium.com/@yash.kulshrestha/using-lets-encrypt-with-express-e069c7abe625)
+
+IMPORTANT NOTES:
+ Congratulations! Your certificate and chain have been saved at:  
+   /etc/letsencrypt/live/api.lexiogame.com/fullchain.pem  
+   Your key file has been saved at:  
+   /etc/letsencrypt/live/api.lexiogame.com/privkey.pem  
+   Your cert will expire on 2018-01-16. To obtain a new or tweaked
+   version of this certificate in the future, simply run
+   letsencrypt-auto again. To non-interactively renew *all* of your
+   certificates, run "letsencrypt-auto renew"  
