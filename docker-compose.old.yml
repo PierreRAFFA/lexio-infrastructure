@@ -10,7 +10,7 @@ services:
 #      NODE_ENV: development
 #      MONGO_API_PASSWORD: password
 #      API_ADMIN_PASSWORD: password
-#      JWT_SECRET: ${JWT_SECRET}
+#      JWT_SECRET: secret
 #    ports:
 #      - "3005:3010"
 
@@ -22,12 +22,12 @@ services:
     build:
       context: ./lexio-notification-mongo
       args: # used by setup.js
-        - mongoInitDbRootUsername=${MONGO_INITDB_ROOT_USERNAME}
-        - mongoInitDbRootPassword=${MONGO_INITDB_ROOT_PASSWORD}
-        - mongoApiPassword=${MONGO_API_PASSWORD}
+        - mongoInitDbRootUsername=admin
+        - mongoInitDbRootPassword=password
+        - mongoApiPassword=password
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
     ports:
       - "27020:27017"
     volumes:
@@ -40,9 +40,9 @@ services:
     build: ../lexio-notification
     environment:
       NODE_ENV: development
-      MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
-      API_ADMIN_PASSWORD: ${API_ADMIN_PASSWORD}
-      JWT_SECRET: ${JWT_SECRET}
+      MONGO_API_PASSWORD: password
+      API_ADMIN_PASSWORD: password
+      JWT_SECRET: secret
     ports:
       - "3004:3010"
     volumes:
@@ -58,12 +58,12 @@ services:
     build:
       context: ./lexio-purchase-mongo
       args: # used by setup.js
-        - mongoInitDbRootUsername=${MONGO_INITDB_ROOT_USERNAME}
-        - mongoInitDbRootPassword=${MONGO_INITDB_ROOT_PASSWORD}
-        - mongoApiPassword=${MONGO_API_PASSWORD}
+        - mongoInitDbRootUsername=admin
+        - mongoInitDbRootPassword=password
+        - mongoApiPassword=password
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
     ports:
       - "27019:27017"
     volumes:
@@ -76,9 +76,9 @@ services:
     build: ../lexio-purchase
     environment:
       NODE_ENV: development
-      MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
-      API_ADMIN_PASSWORD: ${API_ADMIN_PASSWORD}
-      JWT_SECRET: ${JWT_SECRET}
+      MONGO_API_PASSWORD: password
+      API_ADMIN_PASSWORD: password
+      JWT_SECRET: secret
     ports:
       - "3003:3010"
     volumes:
@@ -94,12 +94,12 @@ services:
     build:
       context: ./lexio-game-mongo
       args: # used by setup.js
-        - mongoInitDbRootUsername=${MONGO_INITDB_ROOT_USERNAME}
-        - mongoInitDbRootPassword=${MONGO_INITDB_ROOT_PASSWORD}
-        - mongoApiPassword=${MONGO_API_PASSWORD}
+        - mongoInitDbRootUsername=admin
+        - mongoInitDbRootPassword=password
+        - mongoApiPassword=password
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
     ports:
       - "27018:27017"
     volumes:
@@ -112,9 +112,9 @@ services:
     build: ../lexio-game
     environment:
       NODE_ENV: development
-      MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
-      API_ADMIN_PASSWORD: ${API_ADMIN_PASSWORD}
-      JWT_SECRET: ${JWT_SECRET}
+      MONGO_API_PASSWORD: password
+      API_ADMIN_PASSWORD: password
+      JWT_SECRET: secret
     ports:
       - "3002:3010"
     volumes:
@@ -131,12 +131,12 @@ services:
     build:
       context: ./lexio-authentication-mongo
       args: # used by setup.js
-        - mongoInitDbRootUsername=${MONGO_INITDB_ROOT_USERNAME}
-        - mongoInitDbRootPassword=${MONGO_INITDB_ROOT_PASSWORD}
-        - mongoApiPassword=${MONGO_API_PASSWORD}
+        - mongoInitDbRootUsername=admin
+        - mongoInitDbRootPassword=password
+        - mongoApiPassword=password
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
     ports:
       - "27017:27017"
     volumes:
@@ -150,10 +150,10 @@ services:
     build: ../lexio-authentication
     environment:
       NODE_ENV: development
-      MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
-      API_ADMIN_PASSWORD: ${API_ADMIN_PASSWORD}
-      API_FACEBOOK_USER_PASSWORD: ${API_FACEBOOK_USER_PASSWORD}
-      JWT_SECRET: ${JWT_SECRET}
+      MONGO_API_PASSWORD: password
+      API_ADMIN_PASSWORD: password
+      API_FACEBOOK_USER_PASSWORD: password
+      JWT_SECRET: secret
     ports:
       - "3001:3010"
     volumes:
@@ -172,7 +172,7 @@ services:
       - ../lexio-gateway:/var/app
     environment:
       NODE_ENV: development
-      JWT_SECRET: ${JWT_SECRET}
+      JWT_SECRET: secret
 
   # Cron Service
   # ============
@@ -180,8 +180,8 @@ services:
     container_name: lexio-cron
     environment:
       NODE_ENV: development
-      MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
-      API_ADMIN_PASSWORD: ${API_ADMIN_PASSWORD}
+      MONGO_API_PASSWORD: password
+      AUTHENTICATION_API_ADMIN_PASSWORD: password
     build:
       context: ../lexio-cron
     volumes:

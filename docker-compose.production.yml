@@ -1,15 +1,28 @@
 version: '3'
 services:
 
+#  # Microservice for the social
+#  # ===========================
+#  lexio-social:
+#    container_name: lexio-social
+#    build: ../lexio-social
+#    environment:
+#      NODE_ENV: production
+#      MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
+#      API_ADMIN_PASSWORD: ${API_ADMIN_PASSWORD}
+#      JWT_SECRET: ${JWT_SECRET}
+#    expose:
+#      - "3010"
+
   # Mongo Database for the push notification
   # ========================================
-  lexio-push-notification-mongo:
-    container_name: lexio-push-notification-mongo
-    image: lexio/lexio-push-notification-mongo:latest
+  lexio-notification-mongo:
+    container_name: lexio-notification-mongo
+    image: lexio/lexio-notification-mongo:latest
     env_file: .env
     command: --auth
     build:
-      context: ./lexio-push-notification-mongo
+      context: ./lexio-notification-mongo
       args: # used by setup.js
         - mongoInitDbRootUsername=${MONGO_INITDB_ROOT_USERNAME}
         - mongoInitDbRootPassword=${MONGO_INITDB_ROOT_PASSWORD}
@@ -20,14 +33,14 @@ services:
     expose:
       - "27017"
     volumes:
-      - /opt/lexio/prod/lexio-push-notification-mongo/db:/data/db
+      - /opt/lexio/prod/lexio-notification-mongo/db:/data/db
 
   # Microservice for the push notification
   # ======================================
-  lexio-push-notification:
-    container_name: lexio-push-notification
-    build: ../lexio-push-notification
-    image: lexio/lexio-push-notification:0.2.0
+  lexio-notification:
+    container_name: lexio-notification
+    build: ../lexio-notification
+    image: lexio/lexio-notification:0.2.0
     environment:
       NODE_ENV: production
       MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
@@ -36,7 +49,7 @@ services:
     expose:
       - "3010"
     links:
-      - lexio-push-notification-mongo:mongohost
+      - lexio-notification-mongo:mongohost
 
   # Mongo Database for the purchase
   # ===============================

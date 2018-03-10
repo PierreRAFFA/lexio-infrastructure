@@ -65,6 +65,12 @@ $ docker run -it --rm --net lexioinfrastructure_default --link lexio-authenticat
 $ docker run -it --rm --net lexioinfrastructure_default --link lexio-game-mongo:mongo mongo mongo -u admin -p password --authenticationDatabase admin lexio-game-mongo/game
 ```
 
+#### Import the prod db to local
+```sh
+$scp -r lexiolive:/opt/lexio/prod /opt/lexio
+```
+
+
 #### Create/Renew the ssl certificate
 [How to create/renew](https://medium.com/@yash.kulshrestha/using-lets-encrypt-with-express-e069c7abe625)
 
