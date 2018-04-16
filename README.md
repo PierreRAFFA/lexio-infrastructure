@@ -67,12 +67,16 @@ $ docker run -it --rm --net lexioinfrastructure_default --link lexio-game-mongo:
 
 #### Import the prod db to local
 ```sh
-$scp -r lexiolive:/opt/lexio/prod /opt/lexio
+$ scp -r lexiolive:/opt/lexio/prod /opt/lexio
 ```
 
 
 #### Create/Renew the ssl certificate
 [How to create/renew](https://medium.com/@yash.kulshrestha/using-lets-encrypt-with-express-e069c7abe625)
+
+```sh
+$ ./letsencrypt-auto renew --force-renewal --standalone --preferred-challenges http
+```
 
 IMPORTANT NOTES:
  Congratulations! Your certificate and chain have been saved at:  

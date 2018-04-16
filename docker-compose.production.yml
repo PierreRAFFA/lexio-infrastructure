@@ -113,7 +113,7 @@ services:
   # =============================
   lexio-game:
     container_name: lexio-game
-    image: lexio/lexio-game:1.5.1
+    image: lexio/lexio-game:1.8.0
     build: ../lexio-game
     environment:
       NODE_ENV: production
@@ -168,7 +168,7 @@ services:
   # ========================
   lexio-gateway:
     container_name: lexio-gateway
-    image: lexio/lexio-gateway:0.2.0
+    image: lexio/lexio-gateway:1.1.0
     build: ../lexio-gateway
     environment:
       NODE_ENV: production
@@ -176,13 +176,13 @@ services:
     ports:
       - "443:3000"
     volumes:
-      - /etc/letsencrypt/archive/api.lexiogame.com:/var/app/ssl
+      - /etc/letsencrypt/live/api.lexiogame.com:/var/app/ssl
 
   # Cron Service
   # ============
   lexio-cron:
     container_name: lexio-cron
-    image: lexio/lexio-cron:0.4.4
+    image: lexio/lexio-cron:1.1.0
     build: ../lexio-cron
     environment:
       NODE_ENV: production
