@@ -168,7 +168,7 @@ services:
   # ========================
   lexio-gateway:
     container_name: lexio-gateway
-    image: lexio/lexio-gateway:1.1.0
+    image: lexio/lexio-gateway:1.2.0
     build: ../lexio-gateway
     environment:
       NODE_ENV: production
@@ -176,7 +176,7 @@ services:
     ports:
       - "443:3000"
     volumes:
-      - /etc/letsencrypt/live/api.lexiogame.com:/var/app/ssl
+      - /etc/letsencrypt/archive/api.lexiogame.com:/var/app/ssl
 
   # Cron Service
   # ============
